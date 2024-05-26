@@ -1,67 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:getx_architecture/app/ui/theme/theme_controller.dart';
 
-// LIGHT THEME COLORS
-const Color lightCanvasColor = Color(0xFFF2F5FF);
-const Color lightScaffoldColor = Color(0xFFFFFFFF);
-const Color lightCardColor = Color(0xFFFFFFFF);
+// Primary Colors
+const Color primaryColor = Color(0xFF6200EA); // Purple
+const Color primaryColorLight = Color(0xFFBB86FC);
+const Color primaryColorDark = Color(0xFF3700B3);
 
-// DARK THEME COLORS
-const Color darkCanvasColor = Color(0xFF202020);
-const Color darkScaffoldColor = Color(0xFF141414);
-const Color darkCardColor = Color(0xFF333232);
+// Secondary Colors
+const Color secondaryColor = Color(0xFF03DAC6); // Teal
+const Color secondaryColorLight = Color(0xFF66FFF9);
+const Color secondaryColorDark = Color(0xFF00A896);
 
-const Color lightPrimaryFontColor = Color(0xFF000000);
-const Color lightSecondaryFontColor = Color.fromRGBO(0, 0, 0, 0.4);
+// Background Colors
+const Color lightCanvasColor = Color(0xFFFFFFFF); // White
+const Color darkCanvasColor = Color(0xFF121212); // Almost black
 
-const Color darkPrimaryFontColor = Color(0xFFFFFFFF);
-const Color darkSecondaryFontColor = Color.fromRGBO(255, 255, 255, 0.4);
+const Color lightScaffoldColor = Color(0xFFF6F6F6); // Light gray
+const Color darkScaffoldColor = Color(0xFF121212); // Almost black
 
-// COMMON COLOR
-const Color primaryColorLight = Color(0xFFF7C727);
-const Color primaryColor = Color(0xFFF7C727);
-const Color primaryColorDark = Color(0xFFF2994A);
+const Color lightCardColor = Color(0xFFFFFFFF); // White
+const Color darkCardColor = Color(0xFF1E1E1E); // Dark gray
 
-const Color secondaryColorLight = Color(0xFF2F80ED);
-const Color secondaryColor = Color(0xFF222A41);
-const Color secondaryColorDark = Color(0xFF242C45);
+// Text Colors
+const Color lightPrimaryTextColor = Color(0xFF000000); // Black
+const Color darkPrimaryTextColor = Color(0xFFFFFFFF); // White
 
-const Color tertiaryColorLight = Color(0xFFFCF0C7);
-const Color tertiaryColor = Color(0xFFF8D247);
-const Color tertiaryColorDark = Color(0xFFE0B827);
+const Color lightSecondaryTextColor = Color(0xFF757575); // Gray
+const Color darkSecondaryTextColor = Color(0xFFB0B0B0); // Light gray
 
-const Color errorColor = Color(0xFFE03616);
-const Color errorColorLight = Color(0xFFFD5839);
-const Color errorColordark = Color(0xFFBB2D13);
+const Color lightDisabledTextColor = Color(0xFFBDBDBD); // Light gray
+const Color darkDisabledTextColor = Color(0xFF4A4A4A); // Dark gray
 
-const Color successColor = Color(0xFF00AF54);
-const Color successColorLight = Color(0xFF24DD7D);
-const Color successColordark = Color(0xFF0F8849);
+// Error and Success Colors
+const Color errorColor = Color(0xFFB00020); // Red
+const Color successColor = Color(0xFF00C853); // Green
+const Color warningColor = Color(0xFF00C853); // Green
 
-const Color backgroundBlue = Color(0xFFF2F6FF);
-const Color greyDeepColor = Color(0xFFE0E0E0);
+// Additional Colors
+const Color lightIconColor = Color(0xFF000000); // Black
+const Color darkIconColor = Color(0xFFFFFFFF); // White
 
-Color primaryBackdrop = primaryColor.withOpacity(0.15);
-
-Color get dividerColor => themeController.isDark.value ? Colors.grey.withOpacity(0.2) : Colors.grey.withOpacity(0.3);
-
-Color get primaryTextColor => themeController.isDark.value ? darkPrimaryFontColor : lightPrimaryFontColor;
-Color get secondaryTextColor => themeController.isDark.value ? darkSecondaryFontColor : lightSecondaryFontColor;
-
-Color get brightColor => themeController.isDark.value ? Colors.white : Colors.black;
-
-Color get brightColorLight => themeController.isDark.value ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.1);
-
-Color statusColor(String status) {
-  Color textColor = status == "pending"
-      ? const Color(0xFFBDBDBD)
-      : status == "completed"
-          ? const Color(0xFFF7C727)
-          : status == "confirmed"
-              ? const Color(0xFF00FF6C)
-              : status == "reschedule"
-                  ? const Color(0xFF6227B0)
-                  : const Color(0xFFFF0000);
-
-  return textColor;
-}
+const Color lightDividerColor = Color(0xFFBDBDBD); // Light gray
+const Color darkDividerColor = Color(0xFF4A4A4A); // Dark gray

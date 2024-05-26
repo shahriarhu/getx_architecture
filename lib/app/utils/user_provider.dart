@@ -8,12 +8,15 @@ class UserProvider {
 
   static get _user => _getStorage.read('authUser');
 
+  ///Get
   static AuthUserModel get userCred => _user != null ? authUserModelFromJson(_user) : AuthUserModel();
 
+  ///Set
   static void setUser(String jsonString) async {
     await _getStorage.write('authUser', jsonString);
   }
 
+  ///Remove
   static void removeUser() async {
     await _getStorage.remove('authUser');
   }

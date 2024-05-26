@@ -15,8 +15,8 @@ class ApiClient {
 
     dio.options = BaseOptions(
       baseUrl: 'https://my-api/',
-      connectTimeout: const Duration(seconds: 8000),
-      receiveTimeout: const Duration(seconds: 8000),
+      connectTimeout: const Duration(seconds: 40),
+      receiveTimeout: const Duration(seconds: 40),
       responseType: ResponseType.json,
       contentType: 'application/json',
     );

@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:getx_architecture/app/routes/app_routes.dart';
+import 'package:getx_architecture/app/utils/dialogue_utils.dart';
+import 'package:getx_architecture/app/utils/network_connectivity.dart';
 import 'package:getx_architecture/app/utils/user_provider.dart';
 
 class ApiClient {
@@ -62,6 +65,36 @@ class ApiClient {
       ),
     );
   }
+
+
+  Future<void> _handleNoInternet(APIParams apiParams) async {
+    NetworkConnectionCheck.instance.apiStack.add(apiParams);
+
+    if (DialogUtils.isPresentedDialog == false) {
+      DialogUtils.isPresentedDialog = true;
+      WidgetsBinding.instance.addPostFrameCallback(
+            (_) {
+          DialogUtils.showConnectionLostAlertDialogue(
+            onTap: () {
+              if (NetworkConnectionCheck.instance.hasInternet == true) {
+                Get.back();
+                DialogUtils.isPresentedDialog = false;
+                for (var element in NetworkConnectionCheck.instance.apiStack) {
+                  // post, get, put api call as well
+                }
+                NetworkConnectionCheck.instance.apiStack = [];
+              } else {
+                Get.back();
+                DialogUtils.isPresentedDialog = false;
+              }
+            },
+          );
+        },
+      );
+    }
+  }
+
+
 
   Future<void> _handleConnectivityError(DioException error) async {
     final connectivityResult = await _connectivity.checkConnectivity();

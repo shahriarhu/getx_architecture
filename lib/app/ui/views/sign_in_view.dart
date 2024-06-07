@@ -27,7 +27,7 @@ class SignInView extends GetView<SignInController> {
                   controller.signIn();
                   // UserProvider.removeUser();
                 },
-                child: Text('Hello'),
+                child: const Text('Hello'),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -38,7 +38,7 @@ class SignInView extends GetView<SignInController> {
                   print(UserProvider.userCred.shopCount);
                   print(UserProvider.userCred.language);
                 },
-                child: Text('GET DATA'),
+                child: const Text('GET DATA'),
               ),
             ],
           ),

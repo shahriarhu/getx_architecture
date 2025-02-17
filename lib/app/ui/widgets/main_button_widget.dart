@@ -33,7 +33,7 @@ class MainButtonWidget extends StatelessWidget {
           ),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: UIHelper.bigPadding()),
+        padding: EdgeInsets.symmetric(vertical: UIHelper.medium),
         child: Row(
           mainAxisSize: fullWidth == true ? MainAxisSize.max : MainAxisSize.min,
           mainAxisAlignment: mainAxisAlignment,

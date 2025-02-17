@@ -107,7 +107,7 @@ ElevatedButtonThemeData _elevatedButtonThemeData = ElevatedButtonThemeData(
       fontSize: 18,
     ),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(UIHelper.extraSmallSpacing()),
+      borderRadius: BorderRadius.circular(UIHelper.xSmall),
     ),
   ),
 );
@@ -119,7 +119,7 @@ TextButtonThemeData _textButtonThemeData = TextButtonThemeData(
       fontSize: 18,
     ),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(UIHelper.extraBigSpacing()),
+      borderRadius: BorderRadius.circular(UIHelper.xLarge),
     ),
   ),
 );

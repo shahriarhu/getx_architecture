@@ -30,13 +30,13 @@ class ViewStateLayout extends StatelessWidget {
       case DataState.success:
         return successWidget;
       case DataState.initial:
-        return initialWidget ?? Container();
+        return initialWidget ?? const SizedBox();
       case DataState.empty:
-        return emptyWidget ?? Container();
+        return emptyWidget ?? const SizedBox();
       case DataState.error:
-        return errorWidget ?? Container();
+        return errorWidget ?? const SizedBox();
       case DataState.offline:
-        return offlineWidget ?? Container();
+        return offlineWidget ?? const SizedBox();
       default:
         return loadingWidget;
     }

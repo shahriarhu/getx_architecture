@@ -16,7 +16,7 @@ class ErrorInterceptor extends Interceptor {
         dioException = DioException(
           error: err,
           response: err.response,
-          message: "erronOnConnectivity".tr,
+          message: "errorOnConnectivity".tr,
           requestOptions: err.requestOptions,
           type: DioExceptionType.connectionError,
         );
@@ -204,9 +204,7 @@ class ErrorInterceptor extends Interceptor {
   }
 
   _handleAuthorizationError(DioException err) {
-    // Handle authorization error
     UserProvider.removeUser();
-    // err.response?.data["detail"]
     Get.offAllNamed(AppRoutes.signIn);
     return;
   }

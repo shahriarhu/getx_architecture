@@ -7,7 +7,7 @@ class AuthMiddleWare extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     if (UserProvider.userCred.token == null || UserProvider.userCred.token == '') {
-      return const RouteSettings(name: Routes.signIn);
+      return const RouteSettings(name: AppRoutes.signIn);
     }
     return null;
   }

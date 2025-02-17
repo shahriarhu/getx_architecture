@@ -6,11 +6,11 @@ import 'package:getx_architecture/app/ui/views/sign_in_view.dart';
 abstract class AppPages {
   AppPages._();
 
-  static const initial = Routes.signIn;
+  static const initial = AppRoutes.signIn;
 
   static final routes = [
     GetPage(
-      name: Routes.signIn,
+      name: AppRoutes.signIn,
       page: () => const SignInView(),
       binding: SignInBindings(),
     ),

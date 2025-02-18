@@ -1,24 +1,68 @@
 import 'package:flutter/material.dart';
 
-class BodyLarge extends StatelessWidget {
-  final String text;
+class BodyExtraLarge extends StatelessWidget {
+  final String? text;
   final Color? color;
   final TextAlign? align;
+  final TextOverflow? overflow;
+  final int? maxLines;
 
-  const BodyLarge({super.key, required this.text, this.color, this.align});
+  const BodyExtraLarge({
+    super.key,
+    required this.text,
+    this.color,
+    this.align,
+    this.overflow,
+    this.maxLines,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text ?? '',
       textAlign: align ?? TextAlign.left,
-      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: color),
+      overflow: overflow ?? TextOverflow.ellipsis,
+      maxLines: maxLines,
+      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontSize: 18,
+            color: color,
+          ),
+    );
+  }
+}
+
+class BodyLarge extends StatelessWidget {
+  final String? text;
+  final Color? color;
+  final TextAlign? align;
+  final TextOverflow? overflow;
+  final int? maxLines;
+
+  const BodyLarge({
+    super.key,
+    required this.text,
+    this.color,
+    this.align,
+    this.overflow,
+    this.maxLines,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text ?? '',
+      textAlign: align ?? TextAlign.left,
+      overflow: overflow ?? TextOverflow.ellipsis,
+      maxLines: maxLines,
+      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: color,
+          ),
     );
   }
 }
 
 class BodyMedium extends StatelessWidget {
-  final String text;
+  final String? text;
   final Color? color;
   final TextAlign? align;
   final TextOverflow? overflow;
@@ -36,17 +80,19 @@ class BodyMedium extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text ?? '',
       textAlign: align ?? TextAlign.left,
-      overflow: overflow ?? TextOverflow.visible,
+      overflow: overflow ?? TextOverflow.ellipsis,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: color),
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: color,
+          ),
     );
   }
 }
 
 class BodySmall extends StatelessWidget {
-  final String text;
+  final String? text;
   final Color? color;
   final TextAlign? align;
   final TextOverflow? overflow;
@@ -64,17 +110,19 @@ class BodySmall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text ?? '',
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.ellipsis,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color),
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: color,
+          ),
     );
   }
 }
 
 class BodyExtraSmall extends StatelessWidget {
-  final String text;
+  final String? text;
   final Color? color;
   final TextAlign? align;
   final TextOverflow? overflow;
@@ -92,14 +140,14 @@ class BodyExtraSmall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text ?? '',
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.ellipsis,
       maxLines: maxLines,
-      style: Theme.of(context)
-          .textTheme
-          .bodySmall
-          ?.copyWith(color: color, fontSize: 10),
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: color,
+            fontSize: 10,
+          ),
     );
   }
 }

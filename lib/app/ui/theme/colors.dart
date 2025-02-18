@@ -41,3 +41,9 @@ const Color darkIconColor = Color(0xFFFFFFFF); // White
 
 const Color lightDividerColor = Color(0xFFBDBDBD); // Light gray
 const Color darkDividerColor = Color(0xFF4A4A4A); // Dark gray
+
+// Shimmer Colors
+const Color shimmerBaseLight = Color(0xFFB0BEC5);
+const Color shimmerHighlightLight = Color(0xFFE3F2FD);
+const Color shimmerBaseDark = Color(0xFF37474F);
+const Color shimmerHighlightDark = Color(0xFF90A4AE);

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getx_architecture/app/ui/widgets/texts/titles.dart';
-import 'package:getx_architecture/app/utils/ui_helpers.dart';
+import 'package:getx_architecture/app/ui/theme/colors.dart';
 
 class MainButtonWidget extends StatelessWidget {
   final String label;
@@ -9,6 +8,7 @@ class MainButtonWidget extends StatelessWidget {
   final Widget? postfix;
   final bool loading;
   final bool? fullWidth;
+  final Color color;
   final MainAxisAlignment mainAxisAlignment;
 
   const MainButtonWidget({
@@ -19,6 +19,7 @@ class MainButtonWidget extends StatelessWidget {
     this.postfix,
     this.loading = false,
     this.fullWidth = true,
+    this.color = primaryColor,
     this.mainAxisAlignment = MainAxisAlignment.center,
   });
 
@@ -28,19 +29,30 @@ class MainButtonWidget extends StatelessWidget {
     return ElevatedButton(
       onPressed: loading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0),
-          ),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: UIHelper.medium),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         child: Row(
           mainAxisSize: fullWidth == true ? MainAxisSize.max : MainAxisSize.min,
           mainAxisAlignment: mainAxisAlignment,
           children: [
-            if (loading) ...[const CircularProgressIndicator(), space],
+            if (loading) ...[
+              const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                ),
+              ),
+              space
+            ],
             if (prefix != null && loading != true) ...[prefix!, space],
-            TitleMedium(text: label),
+            Text(label),
             if (postfix != null && loading != true) ...[space, postfix!],
           ],
         ),

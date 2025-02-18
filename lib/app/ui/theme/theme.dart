@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getx_architecture/app/ui/theme/colors.dart';
-import 'package:getx_architecture/app/utils/ui_helpers.dart';
+import 'package:getx_architecture/app/utils/ui_spacing.dart';
 
 ThemeData lightTheme = ThemeData.light().copyWith(
   primaryColor: primaryColor,
@@ -107,7 +107,7 @@ ElevatedButtonThemeData _elevatedButtonThemeData = ElevatedButtonThemeData(
       fontSize: 18,
     ),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(UIHelper.xSmall),
+      borderRadius: BorderRadius.circular(UISpacing.xSmall),
     ),
   ),
 );
@@ -119,7 +119,7 @@ TextButtonThemeData _textButtonThemeData = TextButtonThemeData(
       fontSize: 18,
     ),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(UIHelper.xLarge),
+      borderRadius: BorderRadius.circular(UISpacing.xLarge),
     ),
   ),
 );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getx_architecture/app/ui/theme/colors.dart';
 import 'package:getx_architecture/app/ui/widgets/texts/bodys.dart';
 import 'package:getx_architecture/app/ui/widgets/texts/titles.dart';
-import 'package:getx_architecture/app/utils/ui_helpers.dart';
+import 'package:getx_architecture/app/utils/ui_spacing.dart';
 
 class TextFieldWidget extends StatelessWidget {
   const TextFieldWidget({
@@ -43,8 +43,8 @@ class TextFieldWidget extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            top: isTopPadding ? UIHelper.medium : 0,
-            bottom: UIHelper.small,
+            top: isTopPadding ? UISpacing.medium : 0,
+            bottom: UISpacing.small,
           ),
           child: isMandatory
               ? Row(
@@ -68,11 +68,11 @@ class TextFieldWidget extends StatelessWidget {
           textInputAction: isLastField ? TextInputAction.done : TextInputAction.next,
           decoration: InputDecoration(
             prefixIcon: Padding(
-              padding: EdgeInsets.all(UIHelper.small),
+              padding: EdgeInsets.all(UISpacing.small),
               child: prefixIcon,
             ),
             suffixIcon: Padding(
-              padding: EdgeInsets.all(UIHelper.small),
+              padding: EdgeInsets.all(UISpacing.small),
               child: suffixIcon,
             ),
             suffixText: suffixText,

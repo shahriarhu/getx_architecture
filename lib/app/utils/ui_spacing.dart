@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class UIHelper {
-  UIHelper._();
+class UISpacing {
+  UISpacing._();
 
   /// Cached screen height (excluding status bar)
   static double get _screenHeight => Get.height - Get.mediaQuery.padding.top;

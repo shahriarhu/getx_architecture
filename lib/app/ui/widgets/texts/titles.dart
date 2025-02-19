@@ -22,7 +22,7 @@ class TitleExtraLarge extends StatelessWidget {
       text ?? '',
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: color,
             fontSize: 18,
@@ -53,7 +53,7 @@ class TitleLarge extends StatelessWidget {
       text ?? '',
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: color,
           ),
@@ -82,7 +82,7 @@ class TitleMedium extends StatelessWidget {
     return Text(
       text ?? '',
       textAlign: align ?? TextAlign.left,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
             color: color,
@@ -113,7 +113,7 @@ class TitleSmall extends StatelessWidget {
       text ?? '',
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       style: Theme.of(context).textTheme.titleSmall?.copyWith(
             color: color,
           ),
@@ -136,13 +136,14 @@ class TitleExtraSmall extends StatelessWidget {
     this.overflow,
     this.maxLines,
   });
+
   @override
   Widget build(BuildContext context) {
     return Text(
       text ?? '',
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       style: Theme.of(context).textTheme.titleSmall?.copyWith(
             color: color,
             fontSize: 10,

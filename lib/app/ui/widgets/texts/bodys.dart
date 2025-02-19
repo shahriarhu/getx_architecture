@@ -21,7 +21,7 @@ class BodyExtraLarge extends StatelessWidget {
     return Text(
       text ?? '',
       textAlign: align ?? TextAlign.left,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontSize: 18,
@@ -52,7 +52,7 @@ class BodyLarge extends StatelessWidget {
     return Text(
       text ?? '',
       textAlign: align ?? TextAlign.left,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: color,
@@ -82,7 +82,7 @@ class BodyMedium extends StatelessWidget {
     return Text(
       text ?? '',
       textAlign: align ?? TextAlign.left,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: color,
@@ -112,7 +112,7 @@ class BodySmall extends StatelessWidget {
     return Text(
       text ?? '',
       textAlign: align ?? TextAlign.left,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: color,
@@ -142,7 +142,7 @@ class BodyExtraSmall extends StatelessWidget {
     return Text(
       text ?? '',
       textAlign: align ?? TextAlign.left,
-      overflow: overflow ?? TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: color,

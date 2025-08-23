@@ -5,215 +5,97 @@ import 'package:getx_architecture/app/utils/user_provider.dart';
 
 class ErrorInterceptor extends Interceptor {
   final Dio dio;
+
   ErrorInterceptor(this.dio);
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    DioException dioException;
+    final dioException = _mapException(err);
 
+    /// Handle special cases
+    if (dioException.response?.statusCode == 401) {
+      _handleAuthorizationError(dioException);
+    }
+
+    if (dioException.type == DioExceptionType.connectionError ||
+        dioException.type == DioExceptionType.connectionTimeout) {
+      _handleConnectivityError(dioException);
+    }
+
+    handler.next(dioException);
+  }
+
+  DioException _mapException(DioException err) {
     switch (err.type) {
       case DioExceptionType.connectionError:
-        dioException = DioException(
-          error: err,
-          response: err.response,
-          message: "errorOnConnectivity".tr,
-          requestOptions: err.requestOptions,
-          type: DioExceptionType.connectionError,
-        );
-        _handleConnectivityError(dioException);
-        break;
+        return _build(err, "errorOnConnectivity".tr);
 
       case DioExceptionType.connectionTimeout:
-        dioException = DioException(
-          error: err,
-          response: err.response,
-          message: "errorOnConnectionTimeout".tr,
-          requestOptions: err.requestOptions,
-          type: DioExceptionType.connectionTimeout,
-        );
-        _handleConnectivityError(dioException);
-        break;
+        return _build(err, "errorOnConnectionTimeout".tr);
 
       case DioExceptionType.sendTimeout:
-        dioException = DioException(
-          error: err,
-          response: err.response,
-          message: "errorOnSendTimeout".tr,
-          requestOptions: err.requestOptions,
-          type: DioExceptionType.sendTimeout,
-        );
-        break;
+        return _build(err, "errorOnSendTimeout".tr);
 
       case DioExceptionType.receiveTimeout:
-        dioException = DioException(
-          error: err,
-          response: err.response,
-          message: "errorOnReceiveTimeout".tr,
-          requestOptions: err.requestOptions,
-          type: DioExceptionType.receiveTimeout,
-        );
-        break;
-
-      case DioExceptionType.badResponse:
-        switch (err.response?.statusCode) {
-          case 400:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioBadRequest".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          case 401:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioUnauthorized".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            _handleAuthorizationError(dioException);
-            break;
-
-          case 403:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioForbidden".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          case 404:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioNotFound".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          case 409:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioConflict".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          case 429:
-            dioException = DioException(
-              error: err,
-              message: "dioTooManyRequests".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          case 500:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioInternalServerError".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          case 502:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioBadGateway".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          case 503:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioServiceUnavailable".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          case 504:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioGatewayTimeout".tr,
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-
-          default:
-            dioException = DioException(
-              error: err,
-              response: err.response,
-              message: "dioInvalidStatus".trParams({"statusCode": (err.response?.statusCode ?? 000).toString()}),
-              requestOptions: err.requestOptions,
-              type: DioExceptionType.badResponse,
-            );
-            break;
-        }
-        break;
+        return _build(err, "errorOnReceiveTimeout".tr);
 
       case DioExceptionType.cancel:
-        dioException = DioException(
-          error: err,
-          response: err.response,
-          message: "dioCancel".tr,
-          requestOptions: err.requestOptions,
-          type: DioExceptionType.cancel,
-        );
-        break;
+        return _build(err, "dioCancel".tr);
 
       case DioExceptionType.badCertificate:
-        dioException = DioException(
-          error: err,
-          response: err.response,
-          message: "dioBadCertificate".tr,
-          requestOptions: err.requestOptions,
-          type: DioExceptionType.badCertificate,
-        );
-        break;
+        return _build(err, "dioBadCertificate".tr);
+
+      case DioExceptionType.badResponse:
+        return _handleBadResponse(err);
 
       case DioExceptionType.unknown:
       default:
-        dioException = DioException(
-          error: err,
-          response: err.response,
-          message: "dioUnknown".tr,
-          requestOptions: err.requestOptions,
-          type: DioExceptionType.unknown,
-        );
-        break;
+        return _build(err, "dioUnknown".tr);
     }
-
-    return handler.next(dioException);
   }
 
-  _handleAuthorizationError(DioException err) {
+  DioException _handleBadResponse(DioException err) {
+    final code = err.response?.statusCode ?? 0;
+
+    final messages = {
+      400: "dioBadRequest".tr,
+      401: "dioUnauthorized".tr,
+      403: "dioForbidden".tr,
+      404: "dioNotFound".tr,
+      409: "dioConflict".tr,
+      429: "dioTooManyRequests".tr,
+      500: "dioInternalServerError".tr,
+      502: "dioBadGateway".tr,
+      503: "dioServiceUnavailable".tr,
+      504: "dioGatewayTimeout".tr,
+    };
+
+    final message = messages[code] ?? "dioInvalidStatus".trParams({"statusCode": code.toString()});
+
+    return _build(err, message);
+  }
+
+  DioException _build(DioException err, String message) {
+    return DioException(
+      error: err,
+      response: err.response,
+      message: message,
+      requestOptions: err.requestOptions,
+      type: err.type,
+    );
+  }
+
+  void _handleAuthorizationError(DioException err) {
     UserProvider.removeUser();
     Get.offAllNamed(AppRoutes.signIn);
-    return;
   }
 
-  _handleConnectivityError(DioException err) async {
+  void _handleConnectivityError(DioException err) async {
+    /// navigate to a connectivity error screen if needed
     // ArgumentModel<DioException> argumentModel = ArgumentModel(
     //   prevRoute: Get.currentRoute,
     //   data: err,
     // );
-    // Get.offNamed(Routes.CONNECTIVITY_ERROR, arguments: argumentModel);
+    // Get.offNamed(Routes.CONNECTIVITY_ERROR, arguments: err);
   }
 }

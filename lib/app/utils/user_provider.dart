@@ -1,12 +1,12 @@
 import 'package:get_storage/get_storage.dart';
-import 'package:getx_architecture/app/core/models/auth_user_model.dart';
+import 'package:getx_architecture/app/core/commons/models/auth_user_model.dart';
 
 class UserProvider {
   UserProvider._();
 
   static final GetStorage _getStorage = GetStorage();
 
-  static get _user => _getStorage.read('authUser');
+  static dynamic get _user => _getStorage.read('authUser');
 
   ///Get
   static AuthUserModel get userCred => _user != null ? authUserModelFromJson(_user) : AuthUserModel();

@@ -23,10 +23,9 @@ class BodyExtraLarge extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontSize: 18,
-            color: color,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.bodyLarge?.copyWith(fontSize: 18, color: color),
     );
   }
 }
@@ -54,9 +53,7 @@ class BodyLarge extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: color,
-          ),
+      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: color),
     );
   }
 }
@@ -84,9 +81,7 @@ class BodyMedium extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: color,
-          ),
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: color),
     );
   }
 }
@@ -114,9 +109,7 @@ class BodySmall extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: color,
-          ),
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color),
     );
   }
 }
@@ -144,10 +137,9 @@ class BodyExtraSmall extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: color,
-            fontSize: 10,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.bodySmall?.copyWith(color: color, fontSize: 10),
     );
   }
 }

@@ -6,7 +6,7 @@ class UISpacing {
   /// Cached screen height (excluding status bar)
   static double get _screenHeight => Get.height - Get.mediaQuery.padding.top;
 
-  /// **Dynamic Scale Factor Based on Screen Size**
+  /// Dynamic Scale Factor Based on Screen Size
   static double _scaleFactor() {
     if (_screenHeight > 1800) return 2.0; // Large Desktop
     if (_screenHeight > 1400) return 1.75; // Standard Desktop
@@ -16,10 +16,10 @@ class UISpacing {
     return 0.85; // Small Phones
   }
 
-  /// **Unified Scalable Spacing & Padding**
+  /// Unified Scalable Spacing & Padding
   static double space(double base) => base * _scaleFactor();
 
-  /// **Predefined Sizes for Consistency**
+  /// Predefined Sizes for Consistency
   static final double xxSmall = space(4);
   static final double xSmall = space(8);
   static final double small = space(12);

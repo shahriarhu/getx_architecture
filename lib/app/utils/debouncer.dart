@@ -8,10 +8,10 @@ class Debouncer {
   late Timer _timer;
 
   Debouncer({this.milliseconds = 600}) {
-    _timer = Timer(const Duration(milliseconds: 0), () {}); // Initialize _timer
+    _timer = Timer(const Duration(milliseconds: 0), () {});
   }
 
-  run(VoidCallback action) {
+  void run(VoidCallback action) {
     _timer.cancel();
     _timer = Timer(Duration(milliseconds: milliseconds!), action);
   }

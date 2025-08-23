@@ -23,10 +23,7 @@ class TitleExtraLarge extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
       overflow: overflow ?? TextOverflow.visible,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: color,
-            fontSize: 18,
-          ),
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: color, fontSize: 18),
     );
   }
 }
@@ -54,9 +51,7 @@ class TitleLarge extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
       overflow: overflow ?? TextOverflow.visible,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: color,
-          ),
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: color),
     );
   }
 }
@@ -84,9 +79,7 @@ class TitleMedium extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: color,
-          ),
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: color),
     );
   }
 }
@@ -114,9 +107,7 @@ class TitleSmall extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
       overflow: overflow ?? TextOverflow.visible,
-      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: color,
-          ),
+      style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color),
     );
   }
 }
@@ -144,10 +135,7 @@ class TitleExtraSmall extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
       overflow: overflow ?? TextOverflow.visible,
-      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: color,
-            fontSize: 10,
-          ),
+      style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color, fontSize: 10),
     );
   }
 }

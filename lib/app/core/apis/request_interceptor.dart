@@ -1,100 +1,103 @@
 import 'dart:developer';
 
-import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
-import 'package:getx_architecture/app/core/apis/environment.dart';
 import 'package:getx_architecture/app/utils/user_provider.dart';
 
-class RequestInterceptor extends d.Interceptor {
-  final d.Dio dio;
-  final Environment environment;
+import 'environment.dart';
 
-  RequestInterceptor(this.dio, {this.environment = Environment.production});
+class RequestInterceptor extends Interceptor {
+  final Dio dio;
+
+  RequestInterceptor(this.dio);
 
   @override
-  void onRequest(d.RequestOptions options, d.RequestInterceptorHandler handler) async {
-    // Add common headers
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     _addHeaders(options);
-
-    // Log request
     _logRequest(options);
-
-    return handler.next(options);
+    handler.next(options);
   }
 
   @override
-  void onResponse(d.Response response, d.ResponseInterceptorHandler handler) {
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
     _logResponse(response);
-    return handler.next(response);
+    handler.next(response);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     _logError(err);
-    return handler.next(err);
+    handler.next(err);
   }
 
   void _addHeaders(RequestOptions options) {
     options.headers["Accept"] = "application/json";
     options.headers["Content-Type"] = "application/json";
 
-    if (UserProvider.userCred.token != null && (UserProvider.userCred.token ?? "").isNotEmpty) {
-      options.headers["Authorization"] = "Bearer ${UserProvider.userCred.token}";
+    final token = UserProvider.userCred.token;
+    if (token != null && token.isNotEmpty) {
+      options.headers["Authorization"] = "Bearer $token";
     }
   }
 
   void _logRequest(RequestOptions options) {
-    final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄REQUEST⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
-        '\n-----------------------------'
-        '\n REQUEST: [${options.method}]'
-        '\n-----------------------------'
-        '\nENVIRONMENT: $environment'
-        '\nPATH: ${options.path}'
-        '\nHEADERS: ${options.headers}'
-        '\nParams: ${options.queryParameters}'
-        '\nBODY: ${options.data}'
-        '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃REQUEST⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
-    log(logMessage);
+    if (EnvironmentConfig.environment != Environment.production) {
+      final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄REQUEST⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
+          '\n-----------------------------'
+          '\n REQUEST: [${options.method}]'
+          '\n-----------------------------'
+          '\nENVIRONMENT: ${EnvironmentConfig.environment}'
+          '\nPATH: ${options.path}'
+          '\nHEADERS: ${options.headers}'
+          '\nParams: ${options.queryParameters}'
+          '\nBODY: ${options.data}'
+          '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃REQUEST⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
+      log(logMessage);
+    }
   }
 
-  void _logResponse(d.Response response) {
-    RequestOptions options = response.requestOptions;
+  void _logResponse(Response response) {
+    if (EnvironmentConfig.environment != Environment.production) {
+      RequestOptions options = response.requestOptions;
 
-    final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄RESPONSE⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
-        '\n-----------------------------'
-        '\n RESPONSE:  ${response.statusCode}'
-        '\n-----------------------------'
-        '\nENVIRONMENT: $environment'
-        '\nREQUEST: [${options.method}]'
-        '\nPATH: ${options.path}'
-        '\nHEADERS: ${options.headers}'
-        '\nParams: ${options.queryParameters}'
-        '\nRESPONSE_STATUS_CODE: ${response.statusCode}'
-        '\nRESPONSE_STATUS_MESSAGE: ${response.statusMessage}'
-        '\nRESPONSE_DATA: $response'
-        '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃RESPONSE⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
+      final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄RESPONSE⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
+          '\n-----------------------------'
+          '\n RESPONSE:  ${response.statusCode}'
+          '\n-----------------------------'
+          '\nENVIRONMENT: ${EnvironmentConfig.environment}'
+          '\nREQUEST: [${options.method}]'
+          '\nPATH: ${options.path}'
+          '\nHEADERS: ${options.headers}'
+          '\nParams: ${options.queryParameters}'
+          '\nRESPONSE_STATUS_CODE: ${response.statusCode}'
+          '\nRESPONSE_STATUS_MESSAGE: ${response.statusMessage}'
+          '\nRESPONSE_DATA: $response'
+          '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃RESPONSE⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
 
-    log(logMessage);
+      log(logMessage);
+    }
   }
 
-  void _logError(DioException err) {
-    RequestOptions options = err.requestOptions;
-    final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄ERROR⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
-        '\n-----------------------------'
-        '\n ERROR:  ${err.response?.statusCode}'
-        '\n-----------------------------'
-        '\nENVIRONMENT: $environment'
-        '\nREQUEST: [${options.method}]'
-        '\nPATH: ${options.path}'
-        '\nHEADERS: ${options.headers}'
-        '\nParams: ${options.queryParameters}'
-        '\nRESPONSE_STATUS_CODE: ${err.response?.statusCode}'
-        '\nERROR_TYPE: ${err.type}'
-        '\nERROR: ${err.error}'
-        '\nERROR_MESSAGE: ${err.message}'
-        '\nRESPONSE_DATA: ${err.response}'
-        '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃ERROR⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
+  void _logError(DioException error) {
+    if (EnvironmentConfig.environment != Environment.production) {
+      RequestOptions options = error.requestOptions;
 
-    log(logMessage);
+      final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄ERROR⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
+          '\n-----------------------------'
+          '\n ERROR:  ${error.response?.statusCode}'
+          '\n-----------------------------'
+          '\nENVIRONMENT: ${EnvironmentConfig.environment}'
+          '\nREQUEST: [${options.method}]'
+          '\nPATH: ${options.path}'
+          '\nHEADERS: ${options.headers}'
+          '\nParams: ${options.queryParameters}'
+          '\nRESPONSE_STATUS_CODE: ${error.response?.statusCode}'
+          '\nERROR_TYPE: ${error.type}'
+          '\nERROR: ${error.error}'
+          '\nERROR_MESSAGE: ${error.message}'
+          '\nRESPONSE_DATA: ${error.response}'
+          '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃ERROR⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
+
+      log(logMessage);
+    }
   }
 }

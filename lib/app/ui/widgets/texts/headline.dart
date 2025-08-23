@@ -65,3 +65,25 @@ class HeadlineSmall extends StatelessWidget {
     );
   }
 }
+
+class HeadlineExtraSmall extends StatelessWidget {
+  final String? text;
+  final Color? color;
+  final TextAlign? align;
+
+  const HeadlineExtraSmall({
+    super.key,
+    required this.text,
+    this.color,
+    this.align,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text ?? '',
+      textAlign: align ?? TextAlign.left,
+      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: color, fontSize: 20),
+    );
+  }
+}

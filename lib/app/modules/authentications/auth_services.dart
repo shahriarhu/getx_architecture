@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:getx_architecture/app/core/apis/api_client.dart';
 import 'package:getx_architecture/app/core/apis/api_endpoints.dart';
-import 'package:getx_architecture/app/utils/user_provider.dart';
 
 class AuthServices {
   final apiClient = ApiClient();
@@ -16,8 +15,6 @@ class AuthServices {
           'password': password,
         },
       );
-
-      UserProvider.setUser(response.toString());
 
       log('-------------------------------');
       log(response.toString());

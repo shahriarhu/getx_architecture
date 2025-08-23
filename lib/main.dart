@@ -38,7 +38,8 @@ class RootBinding extends Bindings {
     EnvironmentConfig.init(Environment.development);
 
     await GetStorage.init();
-    Get.lazyPut<ThemeController>(() => ThemeController());
-    Get.lazyPut<LanguageController>(() => LanguageController());
+
+    Get.lazyPut<ThemeController>(() => ThemeController(), fenix: true);
+    Get.lazyPut<LanguageController>(() => LanguageController(), fenix: true);
   }
 }

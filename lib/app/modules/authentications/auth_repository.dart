@@ -12,7 +12,7 @@ class AuthRepository {
   Future<ResponseModel> signIn(String email, String password) async {
     final data = await _authService.signIn(email, password);
 
-    UserProvider.setUser(jsonEncode(data));
+    UserProvider.setUser(jsonEncode(data['data']));
 
     return ResponseModel();
   }

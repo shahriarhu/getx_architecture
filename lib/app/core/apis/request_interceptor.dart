@@ -1,15 +1,10 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:getx_architecture/app/core/apis/environment.dart';
 import 'package:getx_architecture/app/utils/user_provider.dart';
 
-import 'environment.dart';
-
 class RequestInterceptor extends Interceptor {
-  final Dio dio;
-
-  RequestInterceptor(this.dio);
-
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     _addHeaders(options);
@@ -30,74 +25,65 @@ class RequestInterceptor extends Interceptor {
   }
 
   void _addHeaders(RequestOptions options) {
-    options.headers["Accept"] = "application/json";
-    options.headers["Content-Type"] = "application/json";
+    options.headers['Accept'] = 'application/json';
+    options.headers['Content-Type'] = 'application/json';
 
     final token = UserProvider.userCred.token;
     if (token != null && token.isNotEmpty) {
-      options.headers["Authorization"] = "Bearer $token";
+      options.headers['Authorization'] = 'Bearer $token';
     }
   }
 
   void _logRequest(RequestOptions options) {
-    if (EnvironmentConfig.environment != Environment.production) {
-      final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄REQUEST⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
-          '\n-----------------------------'
-          '\n REQUEST: [${options.method}]'
-          '\n-----------------------------'
-          '\nENVIRONMENT: ${EnvironmentConfig.environment}'
-          '\nPATH: ${options.path}'
-          '\nHEADERS: ${options.headers}'
-          '\nParams: ${options.queryParameters}'
-          '\nBODY: ${options.data}'
-          '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃REQUEST⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
-      log(logMessage);
+    if (EnvironmentConfig.isProd) return;
+
+    final safeHeaders = Map<String, dynamic>.from(options.headers);
+    if (safeHeaders.containsKey('Authorization')) {
+      safeHeaders['Authorization'] = 'Bearer ***';
     }
+
+    log(
+      [
+        '',
+        '⬇️⬇️⬇️ REQUEST ⬇️⬇️⬇️',
+        '[${options.method}] ${options.uri}',
+        'Headers: $safeHeaders',
+        'Query: ${options.queryParameters}',
+        'Body: ${options.data}',
+        '⬆️⬆️⬆️ REQUEST ⬆️⬆️⬆️',
+      ].join('\n'),
+    );
   }
 
   void _logResponse(Response response) {
-    if (EnvironmentConfig.environment != Environment.production) {
-      RequestOptions options = response.requestOptions;
+    if (EnvironmentConfig.isProd) return;
 
-      final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄RESPONSE⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
-          '\n-----------------------------'
-          '\n RESPONSE:  ${response.statusCode}'
-          '\n-----------------------------'
-          '\nENVIRONMENT: ${EnvironmentConfig.environment}'
-          '\nREQUEST: [${options.method}]'
-          '\nPATH: ${options.path}'
-          '\nHEADERS: ${options.headers}'
-          '\nParams: ${options.queryParameters}'
-          '\nRESPONSE_STATUS_CODE: ${response.statusCode}'
-          '\nRESPONSE_STATUS_MESSAGE: ${response.statusMessage}'
-          '\nRESPONSE_DATA: $response'
-          '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃RESPONSE⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
-
-      log(logMessage);
-    }
+    log(
+      [
+        '',
+        '✅✅✅ RESPONSE ✅✅✅',
+        '[${response.requestOptions.method}] ${response.requestOptions.uri}',
+        'Status: ${response.statusCode}',
+        'Data: ${response.data}',
+        '✅✅✅ RESPONSE ✅✅✅',
+      ].join('\n'),
+    );
   }
 
   void _logError(DioException error) {
-    if (EnvironmentConfig.environment != Environment.production) {
-      RequestOptions options = error.requestOptions;
+    if (EnvironmentConfig.isProd) return;
 
-      final logMessage = '\n⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄ERROR⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄'
-          '\n-----------------------------'
-          '\n ERROR:  ${error.response?.statusCode}'
-          '\n-----------------------------'
-          '\nENVIRONMENT: ${EnvironmentConfig.environment}'
-          '\nREQUEST: [${options.method}]'
-          '\nPATH: ${options.path}'
-          '\nHEADERS: ${options.headers}'
-          '\nParams: ${options.queryParameters}'
-          '\nRESPONSE_STATUS_CODE: ${error.response?.statusCode}'
-          '\nERROR_TYPE: ${error.type}'
-          '\nERROR: ${error.error}'
-          '\nERROR_MESSAGE: ${error.message}'
-          '\nRESPONSE_DATA: ${error.response}'
-          '\n⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃ERROR⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃';
-
-      log(logMessage);
-    }
+    log(
+      [
+        '',
+        '⛔⛔⛔ ERROR ⛔⛔⛔',
+        '[${error.requestOptions.method}] ${error.requestOptions.uri}',
+        'Type: ${error.type}',
+        'Status: ${error.response?.statusCode}',
+        'Message: ${error.message}',
+        'Data: ${error.response?.data}',
+        '⛔⛔⛔ ERROR ⛔⛔⛔',
+      ].join('\n'),
+    );
   }
 }

@@ -6,7 +6,9 @@ import 'package:getx_architecture/app/ui/layouts/view_state_layout.dart';
 import 'package:getx_architecture/app/ui/toast.dart';
 
 class SignInController extends GetxController {
-  final AuthRepository _authRepository = AuthRepository();
+  final AuthRepository _authRepository;
+
+  SignInController(this._authRepository);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -32,7 +34,7 @@ class SignInController extends GetxController {
       dataState(DataState.success);
 
       /// Get.offAllNamed(AppRoutes.home);
-    } on DioException catch (e) {
+    } on DioException {
       dataState(DataState.error);
     } catch (e) {
       showError('somethingWentWrongTryAgain'.tr);

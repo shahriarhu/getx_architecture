@@ -19,4 +19,6 @@ class EnvironmentConfig {
         return 'https://api.shahriarhu.com';
     }
   }
+
+  static bool get isProd => environment == Environment.production;
 }

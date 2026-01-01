@@ -1,28 +1,69 @@
 import 'package:dio/dio.dart';
-import 'package:getx_architecture/app/core/apis/environment.dart';
-import 'package:getx_architecture/app/core/apis/error_interceptor.dart';
-import 'package:getx_architecture/app/core/apis/request_interceptor.dart';
 
 class ApiClient {
   final Dio dio;
 
-  ApiClient._internal(this.dio);
+  ApiClient({required this.dio});
 
-  /// Factory constructor to create a pre-configured Dio instance
-  factory ApiClient() {
-    final dio = Dio(BaseOptions(
-      baseUrl: EnvironmentConfig.baseUrl,
-      connectTimeout: const Duration(seconds: 60),
-      receiveTimeout: const Duration(seconds: 60),
-      responseType: ResponseType.json,
-      contentType: 'application/json',
-    ));
+  Future<Response<T>> get<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) {
+    return dio.get<T>(
+      path,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
 
-    dio.interceptors.addAll([
-      RequestInterceptor(dio),
-      ErrorInterceptor(dio),
-    ]);
+  Future<Response<T>> post<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) {
+    return dio.post<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
 
-    return ApiClient._internal(dio);
+  Future<Response<T>> put<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) {
+    return dio.put<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  Future<Response<T>> delete<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) {
+    return dio.delete<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 }

@@ -4,25 +4,18 @@ import 'package:getx_architecture/app/routes/app_routes.dart';
 import 'package:getx_architecture/app/utils/user_provider.dart';
 
 class ErrorInterceptor extends Interceptor {
-  final Dio dio;
-
-  ErrorInterceptor(this.dio);
+  static bool _redirecting = false;
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    final dioException = _mapException(err);
+    final mapped = _mapException(err);
 
-    /// Handle special cases
-    if (dioException.response?.statusCode == 401) {
-      _handleAuthorizationError(dioException);
+    final status = mapped.response?.statusCode;
+    if (status == 401) {
+      _handleUnauthorizedOnce();
     }
 
-    if (dioException.type == DioExceptionType.connectionError ||
-        dioException.type == DioExceptionType.connectionTimeout) {
-      _handleConnectivityError(dioException);
-    }
-
-    handler.next(dioException);
+    handler.next(mapped);
   }
 
   DioException _mapException(DioException err) {
@@ -77,25 +70,24 @@ class ErrorInterceptor extends Interceptor {
 
   DioException _build(DioException err, String message) {
     return DioException(
-      error: err,
-      response: err.response,
-      message: message,
       requestOptions: err.requestOptions,
+      response: err.response,
       type: err.type,
+      error: err.error,
+      message: message,
     );
   }
 
-  void _handleAuthorizationError(DioException err) {
-    UserProvider.removeUser();
-    Get.offAllNamed(AppRoutes.signIn);
-  }
+  void _handleUnauthorizedOnce() {
+    if (_redirecting) return;
+    _redirecting = true;
 
-  void _handleConnectivityError(DioException err) async {
-    /// navigate to a connectivity error screen if needed
-    // ArgumentModel<DioException> argumentModel = ArgumentModel(
-    //   prevRoute: Get.currentRoute,
-    //   data: err,
-    // );
-    // Get.offNamed(Routes.CONNECTIVITY_ERROR, arguments: err);
+    UserProvider.removeUser();
+
+    // Use microtask to avoid navigation during interceptor stack
+    Future.microtask(() {
+      Get.offAllNamed(AppRoutes.signIn);
+      _redirecting = false;
+    });
   }
 }

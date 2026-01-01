@@ -4,7 +4,9 @@ import 'package:getx_architecture/app/core/apis/api_client.dart';
 import 'package:getx_architecture/app/core/apis/api_endpoints.dart';
 
 class AuthServices {
-  final apiClient = ApiClient();
+  final ApiClient apiClient;
+
+  AuthServices({required this.apiClient});
 
   Future<dynamic> signIn(String mobileNumber, String password) async {
     try {

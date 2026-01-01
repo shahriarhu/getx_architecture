@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:getx_architecture/app/root_bindings.dart';
 import 'package:getx_architecture/app/routes/app_pages.dart';
 import 'package:getx_architecture/app/translations/language_controller.dart';
@@ -12,8 +11,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await RootBindings().dependencies();
-
-  await GetStorage.init();
 
   runApp(
     GetMaterialApp(

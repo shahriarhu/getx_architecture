@@ -4,13 +4,13 @@ import 'package:getx_architecture/app/core/apis/api_client.dart';
 import 'package:getx_architecture/app/core/apis/api_endpoints.dart';
 
 class AuthServices {
-  final ApiClient apiClient;
+  final ApiClient _apiClient;
 
-  AuthServices({required this.apiClient});
+  AuthServices({required ApiClient apiClient}) : _apiClient = apiClient;
 
   Future<dynamic> signIn(String mobileNumber, String password) async {
     try {
-      final response = await apiClient.dio.post(
+      final response = await _apiClient.post(
         ApiEndpoints.signIn,
         data: {
           'mobile_number': mobileNumber,

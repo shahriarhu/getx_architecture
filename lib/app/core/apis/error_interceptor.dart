@@ -84,7 +84,7 @@ class ErrorInterceptor extends Interceptor {
 
     UserProvider.removeUser();
 
-    // Use microtask to avoid navigation during interceptor stack
+    /// Use microtask to avoid navigation during interceptor stack
     Future.microtask(() {
       Get.offAllNamed(AppRoutes.signIn);
       _redirecting = false;

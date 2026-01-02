@@ -30,7 +30,7 @@ class AssetSvgWidget extends StatelessWidget {
         width: width,
         url,
         fit: fit,
-        color: color,
+        colorFilter: color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
       ),
     );
   }

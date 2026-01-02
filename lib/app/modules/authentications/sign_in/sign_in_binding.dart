@@ -7,7 +7,7 @@ class SignInBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => AuthServices(apiClient: Get.find()));
-    Get.lazyPut(() => AuthRepository(Get.find()));
+    Get.lazyPut(() => AuthRepository(Get.find(), Get.find()));
     Get.lazyPut(() => SignInController(Get.find()));
   }
 }

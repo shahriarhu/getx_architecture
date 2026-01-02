@@ -1,13 +1,9 @@
-import 'dart:convert';
-
-AuthUserModel authUserModelFromJson(String str) => AuthUserModel.fromJson(json.decode(str));
-
-String authUserModelToJson(AuthUserModel data) => json.encode(data.toJson());
-
 class AuthUserModel {
   String? name;
   String? mobileNumber;
-  String? token;
+  String? accessToken;
+  String? refreshToken;
+  DateTime? accessExpiry;
   String? email;
   int? shopCount;
   String? language;
@@ -15,7 +11,9 @@ class AuthUserModel {
   AuthUserModel({
     this.name,
     this.mobileNumber,
-    this.token,
+    this.accessToken,
+    this.refreshToken,
+    this.accessExpiry,
     this.email,
     this.shopCount,
     this.language,
@@ -24,7 +22,9 @@ class AuthUserModel {
   factory AuthUserModel.fromJson(Map<String, dynamic> json) => AuthUserModel(
         name: json["name"],
         mobileNumber: json["mobile_number"],
-        token: json["token"],
+        accessToken: json["access_token"] ?? json["token"], // backward compat
+        refreshToken: json["refresh_token"],
+        accessExpiry: json["access_expiry"] != null ? DateTime.fromMillisecondsSinceEpoch(json["access_expiry"]) : null,
         email: json["email"],
         shopCount: json["shop_count"],
         language: json["language"],
@@ -33,9 +33,10 @@ class AuthUserModel {
   Map<String, dynamic> toJson() => {
         "name": name,
         "mobile_number": mobileNumber,
-        "token": token,
         "email": email,
         "shop_count": shopCount,
         "language": language,
+
+        // ❌ Do NOT persist tokens here anymore
       };
 }

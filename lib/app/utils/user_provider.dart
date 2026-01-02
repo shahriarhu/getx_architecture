@@ -4,20 +4,20 @@ import 'package:getx_architecture/app/core/commons/models/auth_user_model.dart';
 class UserProvider {
   UserProvider._();
 
-  static final GetStorage _getStorage = GetStorage();
+  static final GetStorage _box = GetStorage();
+  static const _kUser = 'authUserProfile';
 
-  static dynamic get _user => _getStorage.read('authUser');
-
-  ///Get
-  static AuthUserModel get userCred => _user != null ? authUserModelFromJson(_user) : AuthUserModel();
-
-  ///Set
-  static void setUser(String jsonString) async {
-    await _getStorage.write('authUser', jsonString);
+  static AuthUserModel get profile {
+    final raw = _box.read(_kUser);
+    if (raw == null) return AuthUserModel();
+    return AuthUserModel.fromJson(raw);
   }
 
-  ///Remove
-  static void removeUser() async {
-    await _getStorage.remove('authUser');
+  static Future<void> setProfile(AuthUserModel user) async {
+    await _box.write(_kUser, user.toJson());
+  }
+
+  static Future<void> clearProfile() async {
+    await _box.remove(_kUser);
   }
 }

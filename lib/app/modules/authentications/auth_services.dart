@@ -2,15 +2,16 @@ import 'dart:developer';
 
 import 'package:getx_architecture/app/core/apis/api_client.dart';
 import 'package:getx_architecture/app/core/apis/api_endpoints.dart';
+import 'package:getx_architecture/app/core/commons/models/auth_user_model.dart';
 
 class AuthServices {
   final ApiClient _apiClient;
 
   AuthServices({required ApiClient apiClient}) : _apiClient = apiClient;
 
-  Future<dynamic> signIn(String mobileNumber, String password) async {
+  Future<AuthUserModel> signIn({required String mobileNumber, required String password}) async {
     try {
-      final response = await _apiClient.post(
+      final response = await _apiClient.dio.post(
         ApiEndpoints.signIn,
         data: {
           'mobile_number': mobileNumber,
@@ -28,7 +29,7 @@ class AuthServices {
       log(response.statusMessage.toString());
       log('-------------------------------');
 
-      return response.data;
+      return AuthUserModel.fromJson(response.data);
     } catch (e) {
       rethrow;
     }

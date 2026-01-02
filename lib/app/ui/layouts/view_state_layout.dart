@@ -37,8 +37,6 @@ class ViewStateLayout extends StatelessWidget {
         return errorWidget ?? const SizedBox();
       case DataState.offline:
         return offlineWidget ?? const SizedBox();
-      default:
-        return loadingWidget;
     }
   }
 }

@@ -34,7 +34,7 @@ class ShimmerBox extends StatelessWidget {
         width: width ?? 80,
         margin: margin ?? const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
         decoration: BoxDecoration(
-          color: baseColor?.withOpacity(0.3) ?? secondaryColor.withOpacity(0.3),
+          color: baseColor?.withValues(alpha: 0.3) ?? secondaryColor.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(radius ?? 6),
         ),
       ),

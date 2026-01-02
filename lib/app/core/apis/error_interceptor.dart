@@ -1,7 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:get/get.dart';
-import 'package:getx_architecture/app/routes/app_routes.dart';
-import 'package:getx_architecture/app/utils/user_provider.dart';
 
 class ErrorInterceptor extends Interceptor {
   static bool _redirecting = false;
@@ -10,10 +7,10 @@ class ErrorInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     final mapped = _mapException(err);
 
-    final status = mapped.response?.statusCode;
-    if (status == 401) {
-      _handleUnauthorizedOnce();
-    }
+    // final status = mapped.response?.statusCode;
+    // if (status == 401) {
+    //   _handleUnauthorizedOnce();
+    // }
 
     handler.next(mapped);
   }
@@ -21,29 +18,29 @@ class ErrorInterceptor extends Interceptor {
   DioException _mapException(DioException err) {
     switch (err.type) {
       case DioExceptionType.connectionError:
-        return _build(err, "errorOnConnectivity".tr);
+        return _build(err, "errorOnConnectivity");
 
       case DioExceptionType.connectionTimeout:
-        return _build(err, "errorOnConnectionTimeout".tr);
+        return _build(err, "errorOnConnectionTimeout");
 
       case DioExceptionType.sendTimeout:
-        return _build(err, "errorOnSendTimeout".tr);
+        return _build(err, "errorOnSendTimeout");
 
       case DioExceptionType.receiveTimeout:
-        return _build(err, "errorOnReceiveTimeout".tr);
+        return _build(err, "errorOnReceiveTimeout");
 
       case DioExceptionType.cancel:
-        return _build(err, "dioCancel".tr);
+        return _build(err, "dioCancel");
 
       case DioExceptionType.badCertificate:
-        return _build(err, "dioBadCertificate".tr);
+        return _build(err, "dioBadCertificate");
 
       case DioExceptionType.badResponse:
         return _handleBadResponse(err);
 
       case DioExceptionType.unknown:
       default:
-        return _build(err, "dioUnknown".tr);
+        return _build(err, "dioUnKnown");
     }
   }
 
@@ -51,19 +48,19 @@ class ErrorInterceptor extends Interceptor {
     final code = err.response?.statusCode ?? 0;
 
     final messages = {
-      400: "dioBadRequest".tr,
-      401: "dioUnauthorized".tr,
-      403: "dioForbidden".tr,
-      404: "dioNotFound".tr,
-      409: "dioConflict".tr,
-      429: "dioTooManyRequests".tr,
-      500: "dioInternalServerError".tr,
-      502: "dioBadGateway".tr,
-      503: "dioServiceUnavailable".tr,
-      504: "dioGatewayTimeout".tr,
+      400: "dioBadRequest",
+      401: "dioUnauthorized",
+      403: "dioForbidden",
+      404: "dioNotFound",
+      409: "dioConflict",
+      429: "dioTooManyRequests",
+      500: "dioInternalServerError",
+      502: "dioBadGateway",
+      503: "dioServiceUnavailable",
+      504: "dioGatewayTimeout",
     };
 
-    final message = messages[code] ?? "dioInvalidStatus".trParams({"statusCode": code.toString()});
+    final message = messages[code] ?? "dioInvalidStatusCode";
 
     return _build(err, message);
   }
@@ -82,11 +79,14 @@ class ErrorInterceptor extends Interceptor {
     if (_redirecting) return;
     _redirecting = true;
 
-    UserProvider.removeUser();
+    // UserProvider.clearProfile();
 
     /// Use microtask to avoid navigation during interceptor stack
     Future.microtask(() {
-      Get.offAllNamed(AppRoutes.signIn);
+      // navigatorKey.currentState?.pushNamedAndRemoveUntil(
+      //   AppRoutes.signIn,
+      //   (route) => false,
+      // );
       _redirecting = false;
     });
   }

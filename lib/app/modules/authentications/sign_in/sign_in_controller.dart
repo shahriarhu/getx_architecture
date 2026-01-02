@@ -12,7 +12,7 @@ class SignInController extends GetxController {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController mobileNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   RxBool isObscure = true.obs;
@@ -27,8 +27,8 @@ class SignInController extends GetxController {
       dataState(DataState.loading);
 
       await _authRepository.signIn(
-        emailController.text,
-        passwordController.text,
+        mobileNumber: mobileNumberController.text,
+        password: passwordController.text,
       );
 
       dataState(DataState.success);

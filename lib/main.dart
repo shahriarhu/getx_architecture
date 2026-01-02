@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_architecture/app/core/commons/auth/auth_session.dart';
+import 'package:getx_architecture/app/core/commons/auth/auth_tokens.dart';
 import 'package:getx_architecture/app/root_bindings.dart';
 import 'package:getx_architecture/app/routes/app_pages.dart';
 import 'package:getx_architecture/app/translations/language_controller.dart';
@@ -12,11 +14,16 @@ Future<void> main() async {
 
   await RootBindings().dependencies();
 
+  final tokenStore = SecureTokenStoreImpl();
+  final authSession = AuthSession(tokenStore);
+
+  final signedIn = await authSession.isSignedIn();
+
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GetX Architecture',
-      initialRoute: AppPages.getInitialPage(),
+      initialRoute: AppPages.getInitialPage(signedIn),
       getPages: AppPages.routes,
       // initialBinding: InitialBinding(),
       theme: lightTheme,

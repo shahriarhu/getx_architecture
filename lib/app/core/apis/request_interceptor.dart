@@ -1,89 +1,136 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
-import 'package:getx_architecture/app/core/apis/environment.dart';
-import 'package:getx_architecture/app/utils/user_provider.dart';
+import 'package:getx_architecture/app/core/commons/auth/auth_tokens.dart';
+import 'package:getx_architecture/app/core/commons/auth/auth_api.dart';
 
 class RequestInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    _addHeaders(options);
-    _logRequest(options);
-    handler.next(options);
+  RequestInterceptor({
+    required this.tokenStore,
+    required this.authApi,
+    required this.mainDio,
+    required this.onSessionExpired,
+    this.proactiveBuffer = const Duration(seconds: 60),
+  });
+
+  final TokenStore tokenStore;
+  final AuthApi authApi; // should call refresh via refreshDio internally
+  final Dio mainDio;
+  final void Function() onSessionExpired;
+  final Duration proactiveBuffer;
+
+  Future<AuthTokens>? _refreshFuture; // single-flight lock
+  static const _kRetried = '__auth_retried_once__';
+  static const _kSkipAuth = '__skip_auth__';
+
+  /// You can mark any request to skip auth:
+  /// dio.get('/public', options: Options(extra: { '__skip_auth__': true }))
+  bool _shouldSkip(RequestOptions o) {
+    final skip = o.extra[_kSkipAuth] == true;
+    if (skip) return true;
+
+    // Always skip for login/refresh endpoints
+    final p = o.path;
+    return p.contains('/auth/refresh') || p.contains('/signin') || p.contains('/login');
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _logResponse(response);
-    handler.next(response);
-  }
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    try {
+      options.headers["Accept"] = "application/json";
+      options.headers["Content-Type"] = "application/json";
 
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    _logError(err);
-    handler.next(err);
-  }
+      if (_shouldSkip(options)) return handler.next(options);
 
-  void _addHeaders(RequestOptions options) {
-    options.headers['Accept'] = 'application/json';
-    options.headers['Content-Type'] = 'application/json';
+      final tokens = await tokenStore.read();
+      if (tokens == null) return handler.next(options);
 
-    final token = UserProvider.userCred.token;
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
+      // ✅ Proactive refresh if expiring soon
+      final finalTokens =
+          tokens.isExpiringSoon(proactiveBuffer) ? await _refreshSingleFlight(tokens.refreshToken) : tokens;
+
+      options.headers["Authorization"] = "Bearer ${finalTokens.accessToken}";
+      handler.next(options);
+    } catch (_) {
+      // Don’t block request if anything fails here — reactive 401 may still handle.
+      handler.next(options);
     }
   }
 
-  void _logRequest(RequestOptions options) {
-    if (EnvironmentConfig.isProd) return;
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    final req = err.requestOptions;
+    final status = err.response?.statusCode;
 
-    final safeHeaders = Map<String, dynamic>.from(options.headers);
-    if (safeHeaders.containsKey('Authorization')) {
-      safeHeaders['Authorization'] = 'Bearer ***';
+    // Only handle 401 and only if not skipped
+    if (status != 401 || _shouldSkip(req)) {
+      return handler.next(err);
     }
 
-    log(
-      [
-        '',
-        '⬇️⬇️⬇️ REQUEST ⬇️⬇️⬇️',
-        '[${options.method}] ${options.uri}',
-        'Headers: $safeHeaders',
-        'Query: ${options.queryParameters}',
-        'Body: ${options.data}',
-        '⬆️⬆️⬆️ REQUEST ⬆️⬆️⬆️',
-      ].join('\n'),
-    );
+    // ✅ Retry only once guard
+    if (req.extra[_kRetried] == true) {
+      await tokenStore.clear();
+      onSessionExpired();
+      return handler.next(err);
+    }
+
+    try {
+      final tokens = await tokenStore.read();
+      if (tokens == null || tokens.refreshToken.isEmpty) {
+        await tokenStore.clear();
+        onSessionExpired();
+        return handler.next(err);
+      }
+
+      // ✅ Reactive refresh (single-flight queue)
+      final newTokens = await _refreshSingleFlight(tokens.refreshToken);
+
+      // Retry original request once with the new token
+      final retry = _clone(req);
+      retry.extra[_kRetried] = true;
+      retry.headers["Authorization"] = "Bearer ${newTokens.accessToken}";
+
+      final response = await mainDio.fetch(retry);
+      return handler.resolve(response);
+    } catch (_) {
+      // Refresh failed => session expired
+      await tokenStore.clear();
+      onSessionExpired();
+      return handler.next(err);
+    }
   }
 
-  void _logResponse(Response response) {
-    if (EnvironmentConfig.isProd) return;
+  Future<AuthTokens> _refreshSingleFlight(String refreshToken) {
+    _refreshFuture ??= authApi.refresh(refreshToken).then((t) async {
+      await tokenStore.save(t);
+      return t;
+    }).whenComplete(() {
+      _refreshFuture = null; // release lock
+    });
 
-    log(
-      [
-        '',
-        '✅✅✅ RESPONSE ✅✅✅',
-        '[${response.requestOptions.method}] ${response.requestOptions.uri}',
-        'Status: ${response.statusCode}',
-        'Data: ${response.data}',
-        '✅✅✅ RESPONSE ✅✅✅',
-      ].join('\n'),
-    );
+    return _refreshFuture!;
   }
 
-  void _logError(DioException error) {
-    if (EnvironmentConfig.isProd) return;
-
-    log(
-      [
-        '',
-        '⛔⛔⛔ ERROR ⛔⛔⛔',
-        '[${error.requestOptions.method}] ${error.requestOptions.uri}',
-        'Type: ${error.type}',
-        'Status: ${error.response?.statusCode}',
-        'Message: ${error.message}',
-        'Data: ${error.response?.data}',
-        '⛔⛔⛔ ERROR ⛔⛔⛔',
-      ].join('\n'),
+  RequestOptions _clone(RequestOptions r) {
+    final o = RequestOptions(
+      path: r.path,
+      method: r.method,
+      baseUrl: r.baseUrl,
+      queryParameters: Map<String, dynamic>.from(r.queryParameters),
+      data: r.data,
+      headers: Map<String, dynamic>.from(r.headers),
+      extra: Map<String, dynamic>.from(r.extra),
+      contentType: r.contentType,
+      responseType: r.responseType,
+      receiveTimeout: r.receiveTimeout,
+      sendTimeout: r.sendTimeout,
+      connectTimeout: r.connectTimeout,
+      followRedirects: r.followRedirects,
+      receiveDataWhenStatusError: r.receiveDataWhenStatusError,
+      validateStatus: r.validateStatus,
     );
+
+    // preserve cancellation
+    o.cancelToken = r.cancelToken;
+
+    return o;
   }
 }

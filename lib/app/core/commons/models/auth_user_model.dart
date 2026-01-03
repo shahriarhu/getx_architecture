@@ -36,7 +36,5 @@ class AuthUserModel {
         "email": email,
         "shop_count": shopCount,
         "language": language,
-
-        // ❌ Do NOT persist tokens here anymore
       };
 }

@@ -34,11 +34,11 @@ void showError(String? message, {String? title, SnackPosition position = SnackPo
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (title != null) ...[
-                TitleSmall(text: title.tr),
+                TitleSmall(title.tr),
                 const SizedBox(height: 4),
               ],
               BodySmall(
-                text: message?.tr,
+                message?.tr,
               )
             ],
           ),
@@ -74,10 +74,10 @@ void showSuccess(String? message, {String? title, SnackPosition position = Snack
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (title != null) ...[
-                TitleSmall(text: title.tr),
+                TitleSmall(title.tr),
                 const SizedBox(height: 4),
               ],
-              BodySmall(text: message?.tr)
+              BodySmall(message?.tr)
             ],
           ),
         ),

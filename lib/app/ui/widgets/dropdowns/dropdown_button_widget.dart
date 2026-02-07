@@ -26,7 +26,7 @@ class DropdownButtonWidget<T> extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TitleMedium(
-          text: '${label.tr}:',
+          '${label.tr}:',
           color: secondaryColor,
         ),
         const SizedBox(height: 8.0),
@@ -44,7 +44,7 @@ class DropdownButtonWidget<T> extends StatelessWidget {
             isExpanded: true,
             onChanged: onChanged,
             hint: BodyLarge(
-              text: 'selectLabel'.trParams({'label': label.tr.toLowerCase()}),
+              'selectLabel'.trParams({'label': label.tr.toLowerCase()}),
             ),
             icon: const Icon(
               Icons.expand_more,

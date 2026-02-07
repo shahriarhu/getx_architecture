@@ -7,9 +7,9 @@ class BodyExtraLarge extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const BodyExtraLarge({
+  const BodyExtraLarge(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -23,9 +23,10 @@ class BodyExtraLarge extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
-      style: Theme.of(
-        context,
-      ).textTheme.bodyLarge?.copyWith(fontSize: 18, color: color),
+      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontSize: 18,
+            color: color,
+          ),
     );
   }
 }
@@ -37,9 +38,9 @@ class BodyLarge extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const BodyLarge({
+  const BodyLarge(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -65,9 +66,9 @@ class BodyMedium extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const BodyMedium({
+  const BodyMedium(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -93,9 +94,9 @@ class BodySmall extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const BodySmall({
+  const BodySmall(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -121,9 +122,9 @@ class BodyExtraSmall extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const BodyExtraSmall({
+  const BodyExtraSmall(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -137,9 +138,10 @@ class BodyExtraSmall extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       overflow: overflow ?? TextOverflow.visible,
       maxLines: maxLines,
-      style: Theme.of(
-        context,
-      ).textTheme.bodySmall?.copyWith(color: color, fontSize: 10),
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: color,
+            fontSize: 10,
+          ),
     );
   }
 }

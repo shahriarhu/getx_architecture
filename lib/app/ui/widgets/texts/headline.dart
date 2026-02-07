@@ -5,9 +5,9 @@ class HeadlineLarge extends StatelessWidget {
   final Color? color;
   final TextAlign? align;
 
-  const HeadlineLarge({
+  const HeadlineLarge(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
   });
@@ -27,9 +27,9 @@ class HeadlineMedium extends StatelessWidget {
   final Color? color;
   final TextAlign? align;
 
-  const HeadlineMedium({
+  const HeadlineMedium(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
   });
@@ -49,9 +49,9 @@ class HeadlineSmall extends StatelessWidget {
   final Color? color;
   final TextAlign? align;
 
-  const HeadlineSmall({
+  const HeadlineSmall(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
   });
@@ -71,9 +71,9 @@ class HeadlineExtraSmall extends StatelessWidget {
   final Color? color;
   final TextAlign? align;
 
-  const HeadlineExtraSmall({
+  const HeadlineExtraSmall(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
   });

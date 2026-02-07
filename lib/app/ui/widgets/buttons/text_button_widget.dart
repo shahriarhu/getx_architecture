@@ -17,7 +17,7 @@ class TextButtonWidget extends StatelessWidget {
     return TextButton(
       onPressed: onPressed,
       child: TitleSmall(
-        text: label,
+        label,
         color: Get.theme.primaryColor,
       ),
     );

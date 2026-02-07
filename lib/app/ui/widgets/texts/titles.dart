@@ -7,9 +7,9 @@ class TitleExtraLarge extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const TitleExtraLarge({
+  const TitleExtraLarge(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -23,7 +23,10 @@ class TitleExtraLarge extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
       overflow: overflow ?? TextOverflow.visible,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: color, fontSize: 18),
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            color: color,
+            fontSize: 18,
+          ),
     );
   }
 }
@@ -35,9 +38,9 @@ class TitleLarge extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const TitleLarge({
+  const TitleLarge(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -63,9 +66,9 @@ class TitleMedium extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const TitleMedium({
+  const TitleMedium(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -91,9 +94,9 @@ class TitleSmall extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const TitleSmall({
+  const TitleSmall(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -119,9 +122,9 @@ class TitleExtraSmall extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
 
-  const TitleExtraSmall({
+  const TitleExtraSmall(
+    this.text, {
     super.key,
-    required this.text,
     this.color,
     this.align,
     this.overflow,
@@ -135,7 +138,10 @@ class TitleExtraSmall extends StatelessWidget {
       textAlign: align ?? TextAlign.left,
       maxLines: maxLines,
       overflow: overflow ?? TextOverflow.visible,
-      style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color, fontSize: 10),
+      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            color: color,
+            fontSize: 10,
+          ),
     );
   }
 }

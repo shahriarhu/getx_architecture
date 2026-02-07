@@ -50,14 +50,14 @@ class TextFieldWidget extends StatelessWidget {
               ? Row(
                   children: [
                     const TitleSmall(
-                      text: '*',
+                      '*',
                       color: errorColor,
                     ),
                     const SizedBox(width: 4),
-                    TitleSmall(text: title),
+                    TitleSmall(title),
                   ],
                 )
-              : BodyMedium(text: title),
+              : BodyMedium(title),
         ),
         TextFormField(
           controller: controller,
